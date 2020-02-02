@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import re
+
+
+SYNOPSIS_RE = re.compile(r"{Header \\tcode{<(\w*)>} synopsis}")
+BLOCK_RE = re.compile(r"\\\w*{(\S*)}")
+
+
+def argsparse():
+    parser = argparse.ArgumentParser(description="Extract headers synopsis from c++ draft.")
+    parser.add_argument('-s', '--source', help="Source directory with *.tex files", required=True)
+    parser.add_argument('-d', '--destination', help="Destination directory for *.hpp files", required=True)
+    parser.add_argument('-f', '--force', help="Override destination folder", action="store_true")
+
+    return parser.parse_args()
+
+if __name__ ==  "__main__":
+    ARGS = argsparse()
+
+    if os.path.exists(ARGS.destination):
+        if ARGS.force:
+            print("Directory \"{}\" exists, overriding.".format(ARGS.destination))
+        else:
+            print("Directory \"{}\" exists, exiting.".format(ARGS.destination))
+            exit(1)
+    else:
+        os.makedirs(ARGS.destination)
+
+    for tex_file_name in os.listdir(ARGS.source):
+        tex_file_path = os.path.join(ARGS.source, tex_file_name)
+
+        if not os.path.isfile(tex_file_path) or not tex_file_name.endswith(".tex"):
+            continue
+
+        print (tex_file_name)
+        with open(tex_file_path) as tex_file:
+            output = None
+            in_codeblock = False
+            for line in tex_file.readlines():
+
+                if not output:
+                    synopsis = SYNOPSIS_RE.search(line)
+                    if (synopsis):
+                        name = synopsis.group(1) + ".hpp"
+                        print(os.path.join(ARGS.destination, name))
+                        output = open(os.path.join(ARGS.destination, name), "w")
+                elif r"\begin{codeblock}" in line:
+                    in_codeblock = True
+                elif r"\end{codeblock}" in line:
+                    output = None
+                    in_codeblock = False
+                elif in_codeblock:
+                    output.write(BLOCK_RE.sub(r"\1", line))
+
