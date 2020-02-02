@@ -1,5 +1,5 @@
 
-This repo contains extracted, from [cplusplus/draft](https://github.com/cplusplus/draft), headers synopsis'.
+Extracted from [cplusplus/draft](https://github.com/cplusplus/draft)
 
 |Standard | Directory | Draft version|
 |---------|-----------|--------------|
