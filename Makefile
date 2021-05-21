@@ -3,7 +3,7 @@ DIR   ?= .
 FORCE ?=
 DRAFT ?= draft
 
-all: std_11 std_14 std_17
+all: std_11 std_14 std_17 std_20
 .PHONY: all
 
 ${DRAFT}:
@@ -24,12 +24,17 @@ std_17: extract draft
 	./extract -s ${DRAFT}/source -d ${DIR}/std_17 ${FORCE}
 .PHONY: std_17
 
+std_20: extract draft
+	(cd draft; git checkout n4861)
+	./extract -s ${DRAFT}/source -d ${DIR}/std_20 ${FORCE}
+.PHONY: std_20
+
 clean:
 	$(RM) -vr ${DRAFT}
 .PHONY: clean
 
 cleanall: clean
-	$(RM) -vr ${DIR}/std_11 ${DIR}/std_14 ${DIR}/std_17
+	$(RM) -vr ${DIR}/std_11 ${DIR}/std_14 ${DIR}/std_17 ${DIR}/std_20
 .PHONY: cleanall
 
 print-%:
@@ -41,11 +46,12 @@ help:
 	@echo "       Extract c++ std headers synopsis'"
 	@echo ""
 	@echo "TARGETS"
-	@echo "       all                     - run std_{11|14|17} targets"
+	@echo "       all                     - run std_{11|14|17|20} targets"
 	@echo "       draft                   - clone cplusplus/draft repo to \"${DRAFT}\" directory"
 	@echo "       std_11                  - extract headers for c++11 standard"
 	@echo "       std_14                  - extract headers for c++14 standard"
 	@echo "       std_17                  - extract headers for c++17 standard"
+	@echo "       std_20                  - extract headers for c++20 standard"
 	@echo "       clean                   - remove \"${DRAFT}\" directory"
 	@echo "       cleanall                - remove \"${DRAFT}\" directory"
 	@echo "                                 and all c++ standards directories"

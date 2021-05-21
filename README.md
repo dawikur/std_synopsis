@@ -6,3 +6,4 @@ Extracted from [cplusplus/draft](https://github.com/cplusplus/draft)
 | C++11   | std_11    | N3337        |
 | C++14   | std_14    | N4140        |
 | C++17   | std_17    | N4659        |
+| C++20   | std_20    | N4861        |
