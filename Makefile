@@ -3,7 +3,7 @@ DIR   ?= .
 FORCE ?=
 DRAFT ?= draft
 
-all: std_11 std_14 std_17 std_20
+all: std_11 std_14 std_17 std_20 std_23
 .PHONY: all
 
 ${DRAFT}:
@@ -29,6 +29,11 @@ std_20: extract draft
 	./extract -s ${DRAFT}/source -d ${DIR}/std_20 ${FORCE}
 .PHONY: std_20
 
+std_23: extract draft
+	(cd draft; git checkout n4950)
+	./extract -s ${DRAFT}/source -d ${DIR}/std_23 ${FORCE}
+.PHONY: std_23
+
 clean:
 	$(RM) -vr ${DRAFT}
 .PHONY: clean
@@ -52,6 +57,7 @@ help:
 	@echo "       std_14                  - extract headers for c++14 standard"
 	@echo "       std_17                  - extract headers for c++17 standard"
 	@echo "       std_20                  - extract headers for c++20 standard"
+	@echo "       std_23                  - extract headers for c++23 standard"
 	@echo "       clean                   - remove \"${DRAFT}\" directory"
 	@echo "       cleanall                - remove \"${DRAFT}\" directory"
 	@echo "                                 and all c++ standards directories"
